@@ -6,13 +6,20 @@ from fastapi import FastAPI, Query
 from sqlalchemy import create_engine, text
 from google import genai
 from google.genai import types
-
+from fastapi.middleware.cors import CORSMiddleware
 load_dotenv()
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # allow all (dev only)
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 engine = create_engine(DATABASE_URL)
 client = genai.Client(api_key=GEMINI_API_KEY)
 
